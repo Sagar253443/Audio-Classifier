@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Classification</title>
+    <style>
+        body {
+            background-color: #F0F5F9; /* Light greyish-blue background color */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            background-color: #607D8B; /* Greyish-blue for header and footer */
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            font-size: 2em;
+        }
+        form {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #78909C; /* Lighter greyish-blue border */
+            border-radius: 5px;
+            background-color: white;
+            font-size: 1.2em;
+        }
+        input[type="submit"] {
+            margin: 10px 0;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #78909C; /* Light greyish-blue button background */
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #546E7A; /* Darker shade on hover */
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Audio Classification</h1>
+    </header>
+
+    <main>
+        <form id="upload-form" method="POST" enctype="multipart/form-data" action="/upload">
+            <input type="file" name="file" id="file">
+            <input type="submit" value="Upload">
+        </form>
+        
+        <div id="result">
+            <!-- Result will be displayed here -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Audio Classification Project</p>
+    </footer>
+
+    <script>
+        // Submit form and handle response
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = `<p>Predicted Class: ${data.result}</p>`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = `<p>Error: ${error}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
